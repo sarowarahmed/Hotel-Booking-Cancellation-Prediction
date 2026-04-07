@@ -167,9 +167,10 @@ pip install -r requirements.txt
 ### #Run notebook
 jupyter notebook
 
-## 🌐 Live Demo
-👉 https://https://hotel-cancellation-predictor-sarowar.streamlit.app
+## 🌐 Live Demo App
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://hotel-cancellation-predictor-sarowar.streamlit.app/)
 
+👉 https://
 ## 👤 Author
 
 # Sarowar Ahmed
