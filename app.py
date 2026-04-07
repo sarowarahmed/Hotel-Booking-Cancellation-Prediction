@@ -1,8 +1,14 @@
-import streamlit as st
-import pandas as pd
+import requests
 import joblib
+import os
 
-# Load model
+# Load Model
+MODEL_URL = "https://huggingface.co/sarowarahmed/hotel-booking-cancellation-model/resolve/main/model.pkl"
+
+if not os.path.exists("model.pkl"):
+    with open("model.pkl", "wb") as f:
+        f.write(requests.get(MODEL_URL).content)
+
 model = joblib.load("model.pkl")
 
 st.title("🏨 Hotel Booking Cancellation Predictor")
