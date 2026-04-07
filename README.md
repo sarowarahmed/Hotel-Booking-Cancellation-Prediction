@@ -16,6 +16,9 @@ Can we predict if a customer will cancel their hotel booking before arrival?
 - Build a production-ready ML pipeline
 - Ensure robustness and avoid data leakage
 
+## 🤖 Model Hosting
+Model is hosted on Hugging Face Hub for efficient deployment
+
 ## 📊 Dataset Summary
 - Feature	Description
 - Total Records	~119,000+
@@ -142,17 +145,13 @@ Hotel-Booking-Cancellation-Prediction/
 
 │
 
-├── data/
+├── app.py
 
-├── notebooks/
-
-│   └── hotel_booking_prediction.ipynb
-
-├── models/
+├── requirements.txt
 
 ├── README.md
 
-└── requirements.txt
+└── hotel_booking_prediction.ipynb
 
 
 ## ⚡ How to Run
@@ -162,11 +161,14 @@ git clone <https://github.com/sarowarahmed/Hotel-Booking-Cancellation-Prediction
 ### #Navigate into project
 cd Hotel-Booking-Cancellation-Prediction
 
-### Install dependencies
+### #Install dependencies
 pip install -r requirements.txt
 
 ### #Run notebook
 jupyter notebook
+
+## 🌐 Live Demo
+👉 https://https://hotel-cancellation-predictor-sarowar.streamlit.app
 
 ## 👤 Author
 
