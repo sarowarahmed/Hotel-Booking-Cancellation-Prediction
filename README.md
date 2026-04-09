@@ -1,5 +1,11 @@
 # 🏨 Hotel Booking Cancellation Prediction
 
+## 🌐 Live Demo App
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://hotel-cancellation-predictor-sarowar.streamlit.app/)
+
+## 🤖 Model Hosting
+Model is hosted on Hugging Face Hub for efficient deployment
+
 ## 📌 Project Overview
 
 - Hotel cancellations significantly impact revenue, inventory planning, and customer experience.
@@ -15,9 +21,6 @@ Can we predict if a customer will cancel their hotel booking before arrival?
 - Identify key factors influencing cancellations
 - Build a production-ready ML pipeline
 - Ensure robustness and avoid data leakage
-
-## 🤖 Model Hosting
-Model is hosted on Hugging Face Hub for efficient deployment
 
 ## 📊 Dataset Summary
 - Feature	Description
@@ -167,10 +170,6 @@ pip install -r requirements.txt
 ### #Run notebook
 jupyter notebook
 
-## 🌐 Live Demo App
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://hotel-cancellation-predictor-sarowar.streamlit.app/)
-
-👉 https://
 ## 👤 Author
 
 # Sarowar Ahmed
