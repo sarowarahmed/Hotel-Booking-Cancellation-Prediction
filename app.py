@@ -40,31 +40,58 @@ st.divider()
 # ======================
 # 🔽 INPUT SECTION
 # ======================
-col1, col2 = st.columns(2)
+st.subheader("📥 Enter Booking Details")
+
+col1, col2, col3 = st.columns(3)
 
 with col1:
-    lead_time = st.slider("Lead Time (days)", 0, 500, 50)
-    adr = st.number_input("Average Daily Rate (ADR)", 0.0, 500.0, 100.0)
-    previous_cancellations = st.slider("Previous Cancellations", 0, 10, 0)
+    adults = st.slider("Adults", 1, 5, 2)
+    children = st.slider("Children", 0, 5, 0)
+    weekends = st.slider("Weekend Nights", 0, 10, 1)
+    weekdays = st.slider("Weekday Nights", 0, 20, 2)
+    lead_time = st.slider("Lead Time", 0, 500, 50)
 
 with col2:
-    deposit_type = st.selectbox(
-        "Deposit Type",
-        ["No Deposit", "Refundable", "Non Refund"]
-    )
-    total_guests = st.slider("Total Guests", 1, 10, 2)
-    total_stay = st.slider("Total Nights", 1, 30, 3)
+    meal_type = st.selectbox("Meal Type", ["BB", "HB", "FB", "SC"])
+    room_type = st.selectbox("Room Type", ["A", "B", "C", "D", "E", "F", "G"])
+    segment = st.selectbox("Market Segment", ["Online", "Offline", "Corporate", "Direct"])
+    deposit_type = st.selectbox("Deposit Type", ["No Deposit", "Refundable", "Non Refund"])
+    repeat = st.selectbox("Repeated Guest", [0, 1])
+
+with col3:
+    price = st.number_input("Price (ADR)", 0.0, 500.0, 100.0)
+    requests = st.slider("Special Requests", 0, 5, 0)
+    arrival_month = st.selectbox("Arrival Month", list(range(1, 13)))
+    arrival_day = st.slider("Arrival Day", 1, 31, 15)
+
+# ======================
+# 🔽 FEATURE ENGINEERING (MUST MATCH NOTEBOOK)
+# ======================
+arrival = arrival_month * 30 + arrival_day  # approximate (same logic as notebook)
+
+price_outlier = 1 if price > 300 else 0
+lead_time_outlier = 1 if lead_time > 200 else 0
 
 # ======================
 # 🔽 CREATE INPUT DATA
 # ======================
 input_data = pd.DataFrame({
+    "adults": [adults],
+    "children": [children],
+    "weekends": [weekends],
+    "weekdays": [weekdays],
+    "meal_type": [meal_type],
+    "room_type": [room_type],
+    "arrival": [arrival],
     "lead_time": [lead_time],
-    "adr": [adr],
-    "previous_cancellations": [previous_cancellations],
-    "deposit_type": [deposit_type],
-    "total_guests": [total_guests],
-    "total_stay": [total_stay]
+    "segment": [segment],
+    "repeat": [repeat],
+    "price": [price],
+    "requests": [requests],
+    "price_outlier": [price_outlier],
+    "lead_time_outlier": [lead_time_outlier],
+    "arrival_month": [arrival_month],
+    "arrival_day": [arrival_day]
 })
 
 # ======================
