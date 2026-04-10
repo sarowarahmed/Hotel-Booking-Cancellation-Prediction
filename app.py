@@ -1,3 +1,4 @@
+import shap
 import streamlit as st
 import pandas as pd
 import joblib
@@ -5,6 +6,7 @@ import requests
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+import plotly.express as px
 
 # ======================
 # 🔽 CONFIG
@@ -33,6 +35,20 @@ model = load_model()
 # 🔽 UI HEADER
 # ======================
 st.title("🏨 Hotel Booking Cancellation Predictor")
+
+st.markdown("""
+<style>
+.main {
+    background-color: #0e1117;
+}
+.stButton>button {
+    background-color: #ff4b4b;
+    color: white;
+    font-size: 18px;
+    border-radius: 10px;
+}
+</style>
+""", unsafe_allow_html=True)
 st.markdown("Predict whether a booking will be canceled with AI")
 
 st.divider()
@@ -95,11 +111,35 @@ input_data = pd.DataFrame({
 })
 
 # ======================
+# 📊 QUICK INSIGHTS
+# ======================
+st.subheader("📊 Booking Insights")
+
+chart_col1, chart_col2 = st.columns(2)
+
+with chart_col1:
+    fig = px.bar(
+        x=["Lead Time", "ADR", "Requests"],
+        y=[lead_time, price, requests],
+        title="Booking Feature Overview"
+    )
+    st.plotly_chart(fig, use_container_width=True)
+
+with chart_col2:
+    fig = px.pie(
+        names=["Adults", "Children"],
+        values=[adults, children],
+        title="Guest Composition"
+    )
+    st.plotly_chart(fig, use_container_width=True)
+
+# ======================
 # 🔽 PREDICTION
 # ======================
 st.divider()
+st.markdown("### 🚀 Prediction Engine")
 
-if st.button("🔮 Predict Cancellation"):
+if st.button("🔮 Analyze Booking Risk"):
 
     prediction = model.predict(input_data)[0]
 
@@ -109,6 +149,24 @@ if st.button("🔮 Predict Cancellation"):
     else:
         proba = None
 
+# ======================
+# 🔍 SHAP EXPLANATION
+# ======================
+st.subheader("🧠 Why this prediction?")
+
+try:
+    model_step = list(model.named_steps.values())[-1]
+
+    explainer = shap.Explainer(model_step)
+    shap_values = explainer(input_data)
+
+    fig, ax = plt.subplots()
+    shap.plots.waterfall(shap_values[0], show=False)
+    st.pyplot(fig)
+
+except Exception as e:
+    st.info("SHAP explanation not available for this model.")
+    
     # ======================
     # 🎯 RESULT DISPLAY
     # ======================
@@ -117,6 +175,29 @@ if st.button("🔮 Predict Cancellation"):
     else:
         st.success("✅ Low Risk: Booking will likely NOT be canceled")
 
+# ======================
+# 💡 BUSINESS INSIGHT
+# ======================
+st.subheader("💡 Business Insight")
+
+if prediction == 1:
+    st.write("""
+    🔴 This booking has high cancellation risk.
+    
+    Recommended Actions:
+    - Require partial prepayment
+    - Send confirmation reminders
+    - Offer discounts for commitment
+    """)
+else:
+    st.write("""
+    🟢 This booking is reliable.
+    
+    Recommended Actions:
+    - Upsell premium services
+    - Offer loyalty benefits
+    """)
+    
     # ======================
     # 📊 PROBABILITY METER
     # ======================
