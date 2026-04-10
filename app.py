@@ -175,9 +175,22 @@ if st.button("🔮 Predict Cancellation"):
 
         # ✅ Handle both SHAP formats
         if isinstance(shap_values, list):
-            shap_val = shap_values[1][0]   # binary classification (class 1)
+            # Case 1: list output
+            shap_val = shap_values[1][0]
             base_val = explainer.expected_value[1]
+
+        elif isinstance(shap_values, np.ndarray) and shap_values.ndim == 3:
+            # Case 2: shape (n_samples, n_features, n_classes)
+            shap_val = shap_values[0, :, 1]
+            base_val = explainer.expected_value[1]
+
+        elif isinstance(shap_values, np.ndarray) and shap_values.ndim == 2:
+            # Case 3: shape (n_features, n_classes)
+            shap_val = shap_values[:, 1]
+            base_val = explainer.expected_value[1]
+
         else:
+            # fallback
             shap_val = shap_values[0]
             base_val = explainer.expected_value
      
