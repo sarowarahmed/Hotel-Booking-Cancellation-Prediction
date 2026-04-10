@@ -186,7 +186,7 @@ if st.button("🔮 Predict Cancellation"):
         shap.plots.waterfall(
             shap.Explanation(
                 values=shap_val,
-                base_values=explainer.expected_value[1],
+                base_values=base_val,
                 data=X_transformed[0],
                 feature_names=feature_names
             ),
