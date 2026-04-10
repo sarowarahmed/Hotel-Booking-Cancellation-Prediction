@@ -171,11 +171,16 @@ if st.button("🔮 Predict Cancellation"):
         explainer = shap.TreeExplainer(model_step)
         shap_values = explainer.shap_values(X_transformed)
 
-        # 👉 For binary classification → use class 1 (cancellation)
-        shap_val = shap_values[1][0]   # class 1, first sample
-
         feature_names = preprocessor.get_feature_names_out()
-      
+
+        # ✅ Handle both SHAP formats
+        if isinstance(shap_values, list):
+            shap_val = shap_values[1][0]   # binary classification (class 1)
+            base_val = explainer.expected_value[1]
+        else:
+            shap_val = shap_values[0]
+            base_val = explainer.expected_value
+     
         # Plot
         fig, ax = plt.subplots()
         shap.plots.waterfall(
