@@ -167,13 +167,13 @@ try:
 except Exception as e:
     st.info("SHAP explanation not available for this model.")
     
-    # ======================
-    # 🎯 RESULT DISPLAY
-    # ======================
-    if prediction == 1:
-        st.error("❌ High Risk: Booking will likely be CANCELED")
-    else:
-        st.success("✅ Low Risk: Booking will likely NOT be canceled")
+# ======================
+# 🎯 RESULT DISPLAY
+# ======================
+if prediction == 1:
+    st.error("❌ High Risk: Booking will likely be CANCELED")
+else:
+    st.success("✅ Low Risk: Booking will likely NOT be canceled")
 
 # ======================
 # 💡 BUSINESS INSIGHT
