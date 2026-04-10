@@ -123,7 +123,7 @@ with chart_col1:
         y=[lead_time, price, requests],
         title="Booking Feature Overview"
     )
-    st.plotly_chart(fig, width='stretch)
+    st.plotly_chart(fig, width='stretch')
 
 with chart_col2:
     fig = px.pie(
@@ -131,7 +131,7 @@ with chart_col2:
         values=[adults, children],
         title="Guest Composition"
     )
-    st.plotly_chart(fig, width='stretch)
+    st.plotly_chart(fig, width='stretch')
 
 # ======================
 # 🔽 PREDICTION
