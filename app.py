@@ -172,7 +172,7 @@ if st.button("🔮 Predict Cancellation"):
         shap_values = explainer.shap_values(X_transformed)
 
         fig, ax = plt.subplots()
-        shap.summary_plot(shap_values, X_transformed, show=False)
+        shap.plots.waterfall(explainer(X_transformed)[0])
         st.pyplot(fig)
 
     except Exception as e:
