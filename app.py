@@ -123,7 +123,7 @@ with chart_col1:
         y=[lead_time, price, requests],
         title="Booking Feature Overview"
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch)
 
 with chart_col2:
     fig = px.pie(
@@ -131,7 +131,7 @@ with chart_col2:
         values=[adults, children],
         title="Guest Composition"
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch)
 
 # ======================
 # 🔽 PREDICTION
@@ -162,17 +162,21 @@ if st.button("🔮 Predict Cancellation"):
     st.subheader("🧠 Why this prediction?")
 
     try:
-        model_step = list(model.named_steps.values())[-1]
+        preprocessor = model.named_steps['preprocessor']
+        model_step = model.named_steps['clf']
 
-        explainer = shap.Explainer(model_step)
-        shap_values = explainer(input_data)
+        # Transform input
+        X_transformed = preprocessor.transform(input_data)
+
+        explainer = shap.TreeExplainer(model_step)
+        shap_values = explainer.shap_values(X_transformed)
 
         fig, ax = plt.subplots()
-        shap.plots.waterfall(shap_values[0], show=False)
+        shap.summary_plot(shap_values, X_transformed, show=False)
         st.pyplot(fig)
 
     except Exception as e:
-        st.info("SHAP explanation not available for this model.")
+        st.error(f"SHAP error: {e}")
 
     # ======================
     # 💡 BUSINESS INSIGHT
@@ -221,24 +225,21 @@ if st.button("🔮 Predict Cancellation"):
     st.subheader("📈 Feature Importance")
 
     try:
-        model_step = model.named_steps['model']
+        preprocessor = model.named_steps['preprocessor']
+        model_step = model.named_steps['clf']
+        
         importances = model_step.feature_importances_
-
-        features = model.named_steps['preprocessor'].get_feature_names_out()
+        feature_names = preprocessor.get_feature_names_out()
 
         importance_df = pd.DataFrame({
-            "Feature": features,
+            "Feature": feature_names,
             "Importance": importances
         }).sort_values(by="Importance", ascending=False).head(10)
 
-        fig, ax = plt.subplots()
-        ax.barh(importance_df["Feature"], importance_df["Importance"])
-        ax.invert_yaxis()
+        st.bar_chart(importance_df.set_index("Feature"))
 
-        st.pyplot(fig)
-
-    except:
-        st.info("Feature importance not available for this model.")
+    except Exception as e:
+        st.error(f"Feature importance error: {e}")
 
 # ======================
 # 🔽 FOOTER
