@@ -137,9 +137,8 @@ with chart_col2:
 # 🔽 PREDICTION
 # ======================
 st.divider()
-st.markdown("### 🚀 Prediction Engine")
 
-if st.button("🔮 Analyze Booking Risk"):
+if st.button("🔮 Predict Cancellation"):
 
     prediction = model.predict(input_data)[0]
 
@@ -149,55 +148,56 @@ if st.button("🔮 Analyze Booking Risk"):
     else:
         proba = None
 
-# ======================
-# 🔍 SHAP EXPLANATION
-# ======================
-st.subheader("🧠 Why this prediction?")
+    # ======================
+    # 🎯 RESULT DISPLAY
+    # ======================
+    if prediction == 1:
+        st.error("❌ High Risk: Booking will likely be CANCELED")
+    else:
+        st.success("✅ Low Risk: Booking will likely NOT be canceled")
 
-try:
-    model_step = list(model.named_steps.values())[-1]
+    # ======================
+    # 🔍 SHAP EXPLANATION
+    # ======================
+    st.subheader("🧠 Why this prediction?")
 
-    explainer = shap.Explainer(model_step)
-    shap_values = explainer(input_data)
+    try:
+        model_step = list(model.named_steps.values())[-1]
 
-    fig, ax = plt.subplots()
-    shap.plots.waterfall(shap_values[0], show=False)
-    st.pyplot(fig)
+        explainer = shap.Explainer(model_step)
+        shap_values = explainer(input_data)
 
-except Exception as e:
-    st.info("SHAP explanation not available for this model.")
+        fig, ax = plt.subplots()
+        shap.plots.waterfall(shap_values[0], show=False)
+        st.pyplot(fig)
+
+    except Exception as e:
+        st.info("SHAP explanation not available for this model.")
+
+    # ======================
+    # 💡 BUSINESS INSIGHT
+    # ======================
     
-# ======================
-# 🎯 RESULT DISPLAY
-# ======================
-if prediction == 1:
-    st.error("❌ High Risk: Booking will likely be CANCELED")
-else:
-    st.success("✅ Low Risk: Booking will likely NOT be canceled")
+    st.subheader("💡 Business Insight")
 
-# ======================
-# 💡 BUSINESS INSIGHT
-# ======================
-st.subheader("💡 Business Insight")
+    if prediction == 1:
+        st.write("""
+        🔴 This booking has high cancellation risk.
+    
+        Recommended Actions:
+        - Require partial prepayment
+        - Send confirmation reminders
+        - Offer discounts for commitment
+        """)
+    else:
+        st.write("""
+        🟢 This booking is reliable.
+    
+        Recommended Actions:
+        - Upsell premium services
+        - Offer loyalty benefits
+        """)
 
-if prediction == 1:
-    st.write("""
-    🔴 This booking has high cancellation risk.
-    
-    Recommended Actions:
-    - Require partial prepayment
-    - Send confirmation reminders
-    - Offer discounts for commitment
-    """)
-else:
-    st.write("""
-    🟢 This booking is reliable.
-    
-    Recommended Actions:
-    - Upsell premium services
-    - Offer loyalty benefits
-    """)
-    
     # ======================
     # 📊 PROBABILITY METER
     # ======================
